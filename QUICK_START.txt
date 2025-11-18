@@ -1,0 +1,52 @@
+===========================================
+EVVM CROSS-CHAIN BALANCER - QUICK START
+===========================================
+
+DEPLOYMENTS COMPLETOS:
+✅ EVVM-A: 0x09F862AD8D76054083bDa05BE32e6b305782cD19
+✅ EVVM-B: 0xA1559Cf40E3f3d8364Aa21c6A2C8014e1e1c3f53
+✅ Balancer: 0x3277E63bc6Abde65fA4290a5b6fE2b4628d0bc7c
+✅ Network: Arbitrum Sepolia (Chain ID: 421614)
+
+CONFIGURAR REOWN (1 MINUTO):
+1. Ve a: https://cloud.reown.com
+2. Sign up (gratis)
+3. Create Project → Copia el Project ID
+4. Edita: frontend/config.js
+   Línea 7: REOWN_PROJECT_ID: 'TU_PROJECT_ID_AQUI'
+
+LEVANTAR FRONTEND:
+cd /home/scarf/frutero/evvm/cross-chain-balancer
+python3 -m http.server 8000
+
+ABRIR NAVEGADOR:
+- Usuarios: http://localhost:8000/frontend/index.html
+- Fishers: http://localhost:8000/frontend/fisher-dashboard.html
+
+FEATURES:
+✅ Multi-wallet (MetaMask, Rainbow, Coinbase, 300+)
+✅ Auto-switch a Arbitrum Sepolia
+✅ Cache de balances (5s TTL) - 3x más rápido
+✅ Cargas paralelas con Promise.all
+✅ Gasless para usuarios (firma off-chain)
+✅ Fishers ganan rewards (priority fee + 0.1% spread)
+
+FLUJO USUARIO:
+1. Conectar wallet (Reown modal)
+2. Ver balances EVVM-A y EVVM-B
+3. Seleccionar A→B o B→A
+4. Firmar mensaje (SIN GAS)
+5. Fisher ejecuta y gana rewards
+
+FLUJO FISHER:
+1. Conectar wallet
+2. Ver pending transfers
+3. Click Execute
+4. Ganar rewards!
+
+EXPLORERS:
+- Balancer: https://sepolia.arbiscan.io/address/0x3277E63bc6Abde65fA4290a5b6fE2b4628d0bc7c
+- EVVM-A: https://sepolia.arbiscan.io/address/0x09F862AD8D76054083bDa05BE32e6b305782cD19
+- EVVM-B: https://sepolia.arbiscan.io/address/0xA1559Cf40E3f3d8364Aa21c6A2C8014e1e1c3f53
+
+TODO LISTO! 🚀

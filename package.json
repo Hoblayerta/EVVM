@@ -1,0 +1,37 @@
+{
+  "name": "evvm-cross-chain-balancer",
+  "version": "1.0.0",
+  "description": "Cross-virtual-chain balancer for EVVM - Transfer MATE tokens between EVVM instances on same host chain",
+  "main": "index.js",
+  "scripts": {
+    "build": "forge build",
+    "test": "forge test",
+    "test:verbose": "forge test -vvvv",
+    "deploy:local": "forge script script/Deploy.s.sol:DeployBalancer --rpc-url http://localhost:8545 --broadcast",
+    "deploy:sepolia": "forge script script/Deploy.s.sol:DeployBalancer --rpc-url sepolia --broadcast --verify -vvvv",
+    "verify": "forge verify-contract",
+    "frontend": "python -m http.server 8000",
+    "clean": "forge clean"
+  },
+  "keywords": [
+    "evvm",
+    "cross-chain",
+    "balancer",
+    "fisher",
+    "ethereum",
+    "defi",
+    "foundry"
+  ],
+  "author": "EVVM Workshop",
+  "license": "MIT",
+  "devDependencies": {},
+  "dependencies": {
+    "@reown/appkit": "^1.8.14",
+    "@reown/appkit-adapter-ethers": "^1.8.14",
+    "@tanstack/react-query": "^5.90.10",
+    "ethers": "5.7.2",
+    "next": "^16.0.3",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  }
+}

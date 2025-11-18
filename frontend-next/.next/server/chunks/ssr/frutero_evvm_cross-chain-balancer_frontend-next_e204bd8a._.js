@@ -1,0 +1,3 @@
+module.exports=[655622,a=>{a.n(a.i(731649))},883560,a=>{a.n(a.i(790305))},339159,a=>{a.n(a.i(878557))},211732,a=>{a.n(a.i(143440))},562114,a=>{a.n(a.i(213153))},814998,(a,b,c)=>{let d=Error("Could not parse module '[project]/frutero/evvm/cross-chain-balancer/frontend-next/app/page.tsx'\n\nExpression expected");throw d.code="MODULE_UNPARSABLE",d}];
+
+//# sourceMappingURL=frutero_evvm_cross-chain-balancer_frontend-next_e204bd8a._.js.map

@@ -1,0 +1,30 @@
+(globalThis.TURBOPACK_CHUNK_LISTS || (globalThis.TURBOPACK_CHUNK_LISTS = [])).push({
+    script: typeof document === "object" ? document.currentScript : undefined,
+    chunks: [
+  "static/chunks/[root-of-the-server]__d7a475a1._.css",
+  "static/chunks/b572f_e31c2c48._.js",
+  "static/chunks/b572f_@reown_appkit-controllers_dist_esm_56cfda00._.js",
+  "static/chunks/b572f_@reown_appkit-wallet_dist_esm_src_2ccda35c._.js",
+  "static/chunks/b572f_viem_19d1c341._.js",
+  "static/chunks/b572f_9b2c7444._.js",
+  "static/chunks/b572f_b0a32bdf._.js",
+  "static/chunks/b572f_48f518bd._.js",
+  "static/chunks/b572f_@walletconnect_utils_dist_index_103de8da.js",
+  "static/chunks/b572f_@walletconnect_core_dist_index_b68a41de.js",
+  "static/chunks/b572f_@walletconnect_sign-client_dist_index_cd48eedd.js",
+  "static/chunks/0e5f8_zod_lib_index_mjs_78e3f45a._.js",
+  "static/chunks/b572f_@reown_appkit_dist_esm_d5163b9a._.js",
+  "static/chunks/b572f_@reown_appkit-scaffold-ui_dist_esm_src_modal_8138ee76._.js",
+  "static/chunks/b572f_@reown_appkit-scaffold-ui_dist_esm_src_partials_8bafea1e._.js",
+  "static/chunks/b572f_@reown_appkit-scaffold-ui_dist_esm_src_views_288406b2._.js",
+  "static/chunks/b572f_@reown_appkit-scaffold-ui_dist_esm_src_utils_be8aa189._.js",
+  "static/chunks/b572f_@reown_appkit-scaffold-ui_dist_esm_exports_850ceb80._.js",
+  "static/chunks/b572f_@reown_appkit-ui_dist_esm_3f8c31ae._.js",
+  "static/chunks/b572f_ethers_lib_esm_9063030a._.js",
+  "static/chunks/b572f_@reown_54bedd04._.js",
+  "static/chunks/b572f_@walletconnect_b77a1bae._.js",
+  "static/chunks/b572f_42760d0f._.js",
+  "static/chunks/frutero_evvm_cross-chain-balancer_frontend-next_2226ebdf._.js"
+],
+    source: "dynamic"
+});

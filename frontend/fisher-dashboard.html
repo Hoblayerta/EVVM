@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fisher Dashboard - EVVM Balancer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: monospace;
+            background: #0a0e27;
+            color: #00ff00;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: #1a1f3a;
+            border: 2px solid #00ff00;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #00ff00;
+            margin-bottom: 10px;
+        }
+
+        .fisher-id {
+            color: #00ddff;
+            font-size: 14px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: #1a1f3a;
+            border: 1px solid #00ff00;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .card h2 {
+            color: #00ddff;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .stat {
+            background: #0a0e27;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: #888;
+            font-size: 12px;
+        }
+
+        .stat-value {
+            color: #00ff00;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        button {
+            background: #00ff00;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: monospace;
+            font-weight: bold;
+            margin: 5px;
+        }
+
+        button:hover {
+            background: #00ddff;
+        }
+
+        button.danger {
+            background: #ff0066;
+            color: white;
+        }
+
+        .transfer-item {
+            background: #0a0e27;
+            border-left: 3px solid #ff9900;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+
+        .transfer-item.completed {
+            border-left-color: #00ff00;
+        }
+
+        .log {
+            background: #000;
+            color: #00ff00;
+            padding: 10px;
+            border-radius: 5px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+
+        .log-entry {
+            margin: 5px 0;
+        }
+
+        .log-entry.success { color: #00ff00; }
+        .log-entry.error { color: #ff0066; }
+        .log-entry.info { color: #00ddff; }
+
+        .liquidity-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        input {
+            background: #0a0e27;
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            padding: 8px;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .status-badge.pending {
+            background: #ff9900;
+            color: #000;
+        }
+
+        .status-badge.executing {
+            background: #00ddff;
+            color: #000;
+        }
+
+        .status-badge.completed {
+            background: #00ff00;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🎣 FISHER DASHBOARD - EVVM Cross-Chain Balancer</h1>
+            <div class="fisher-id">
+                Fisher Address: <span id="fisherAddress">Not connected</span>
+            </div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="grid">
+            <!-- Earnings Stats -->
+            <div class="card">
+                <h2>💰 Earnings</h2>
+                <div class="stat">
+                    <div class="stat-label">Total Rewards</div>
+                    <div class="stat-value" id="totalRewards">0</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Pending Rewards</div>
+                    <div class="stat-value" id="pendingRewards">0</div>
+                </div>
+                <button onclick="claimRewards()">💎 Claim Rewards</button>
+            </div>
+
+            <!-- Liquidity Stats -->
+            <div class="card">
+                <h2>💧 Your Liquidity</h2>
+                <div class="stat">
+                    <div class="stat-label">In EVVM-A</div>
+                    <div class="stat-value" id="liquidityA">0</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">In EVVM-B</div>
+                    <div class="stat-value" id="liquidityB">0</div>
+                </div>
+            </div>
+
+            <!-- Performance Stats -->
+            <div class="card">
+                <h2>📊 Performance</h2>
+                <div class="stat">
+                    <div class="stat-label">Transfers Executed</div>
+                    <div class="stat-value" id="transfersExecuted">0</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Success Rate</div>
+                    <div class="stat-value" id="successRate">100%</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Liquidity Management -->
+        <div class="card">
+            <h2>💧 Manage Liquidity</h2>
+            <div class="liquidity-controls">
+                <div>
+                    <label>Amount for EVVM-A</label>
+                    <input type="number" id="addLiquidityA" placeholder="0.00">
+                </div>
+                <div>
+                    <label>Amount for EVVM-B</label>
+                    <input type="number" id="addLiquidityB" placeholder="0.00">
+                </div>
+            </div>
+            <button onclick="addLiquidity()">➕ Add Liquidity</button>
+            <button class="danger" onclick="removeLiquidity()">➖ Remove Liquidity</button>
+        </div>
+
+        <!-- Pending Transfers -->
+        <div class="card">
+            <h2>⏳ Pending Transfers (Auto-Scan Every 10s)</h2>
+            <button onclick="scanTransfers()">🔍 Scan Now</button>
+            <button onclick="toggleAutoExecute()">
+                <span id="autoExecuteText">🤖 Enable Auto-Execute</span>
+            </button>
+            <div id="pendingTransfersList"></div>
+        </div>
+
+        <!-- Completed Transfers -->
+        <div class="card">
+            <h2>✅ Your Executed Transfers</h2>
+            <div id="completedTransfersList"></div>
+        </div>
+
+        <!-- Activity Log -->
+        <div class="card">
+            <h2>📝 Activity Log</h2>
+            <div class="log" id="activityLog">
+                <div class="log-entry info">[INFO] Fisher dashboard initialized</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
+    <script src="config.js"></script>
+    <script src="fisher.js"></script>
+</body>
+</html>

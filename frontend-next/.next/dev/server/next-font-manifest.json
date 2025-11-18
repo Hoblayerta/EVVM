@@ -1,0 +1,13 @@
+{
+  "app": {
+    "[project]/frutero/evvm/cross-chain-balancer/frontend-next/app/fisher/page": [
+      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
+    ],
+    "[project]/frutero/evvm/cross-chain-balancer/frontend-next/app/page": [
+      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
+    ]
+  },
+  "appUsingSizeAdjust": true,
+  "pages": {},
+  "pagesUsingSizeAdjust": false
+}
