@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Transfer Signature</title>
+    <script src="https://cdn.ethers.io/lib/ethers-5.7.umd.min.js"></script>
+</head>
+<body>
+    <h1>EVVM Balancer - Test Transfer Signature</h1>
+    <p>Open browser console (F12) to see debug output</p>
+
+    <script>
+        // Paste this code in browser console connected to MetaMask
+
+        async function testTransferSignature() {
+            console.log('🔍 Testing Transfer Signature Verification\n');
+
+            // Configuration
+            const BALANCER = '0xF0882824C4DEA8d2a1881ad323b3BabB26FB8CAA';
+            const EVVM_A = '0x09F862AD8D76054083bDa05BE32e6b305782cD19';
+            const PRINCIPAL_TOKEN = '0x0000000000000000000000000000000000000001';
+
+            // Check pending transfers
+            const pending = JSON.parse(localStorage.getItem('pendingTransfers') || '[]');
+
+            if (pending.length === 0) {
+                console.log('❌ No pending transfers found in localStorage');
+                console.log('Please sign a transfer first on the main page');
+                return;
+            }
+
+            const transfer = pending[0];
+            console.log('📋 Found pending transfer:');
+            console.log('  User:', transfer.user);
+            console.log('  Amount:', transfer.amount, 'MATE');
+            console.log('  Direction:', transfer.direction);
+            console.log('  Nonce:', transfer.nonce);
+            console.log('  Priority Fee:', transfer.priorityFee, 'ETH');
+            console.log('  Signature:', transfer.signature);
+            console.log('');
+
+            // Construct message that was signed
+            const message = `0,pay,${BALANCER.toLowerCase()},${PRINCIPAL_TOKEN.toLowerCase()},${ethers.utils.parseEther(transfer.amount).toString()},${ethers.utils.parseEther(transfer.priorityFee).toString()},${transfer.nonce},true,0x0000000000000000000000000000000000000000`;
+
+            console.log('📝 Message that should have been signed:');
+            console.log(message);
+            console.log('');
+
+            // Recover signer from signature
+            try {
+                const recoveredAddress = ethers.utils.verifyMessage(message, transfer.signature);
+                console.log('🔐 Signature Verification:');
+                console.log('  Expected signer:', transfer.user);
+                console.log('  Recovered signer:', recoveredAddress);
+                console.log('  Match:', recoveredAddress.toLowerCase() === transfer.user.toLowerCase() ? '✅ YES' : '❌ NO');
+                console.log('');
+
+                if (recoveredAddress.toLowerCase() !== transfer.user.toLowerCase()) {
+                    console.log('❌ SIGNATURE MISMATCH!');
+                    console.log('The signature does not match the user address.');
+                    console.log('This is why EVVM rejects it with InvalidSignature error.');
+                    return;
+                }
+
+                console.log('✅ Signature is valid! The error must be something else.');
+                console.log('');
+                console.log('Next: Try executing this transfer on the fisher dashboard');
+
+            } catch (error) {
+                console.error('❌ Error recovering signer:', error);
+            }
+        }
+
+        // Auto-run on load
+        if (typeof window !== 'undefined' && window.ethereum) {
+            setTimeout(testTransferSignature, 1000);
+        }
+    </script>
+</body>
+</html>

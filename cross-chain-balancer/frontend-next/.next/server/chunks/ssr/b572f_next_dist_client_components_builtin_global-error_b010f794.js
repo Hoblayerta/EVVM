@@ -1,0 +1,3 @@
+module.exports=[758004,(a,b,c)=>{let{createClientModuleProxy:d}=a.r(952366);a.n(d("[project]/frutero/evvm/cross-chain-balancer/frontend-next/node_modules/next/dist/client/components/builtin/global-error.js <module evaluation>"))},38586,(a,b,c)=>{let{createClientModuleProxy:d}=a.r(952366);a.n(d("[project]/frutero/evvm/cross-chain-balancer/frontend-next/node_modules/next/dist/client/components/builtin/global-error.js"))},213153,a=>{"use strict";a.i(758004);var b=a.i(38586);a.n(b)}];
+
+//# sourceMappingURL=b572f_next_dist_client_components_builtin_global-error_b010f794.js.map

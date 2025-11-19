@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EVVM Cross-Chain Balancer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .balance-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .balance-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .balance-amount {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .balance-token {
+            font-size: 14px;
+            color: #999;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 15px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .status {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            display: block;
+        }
+
+        .transfer-arrow {
+            text-align: center;
+            font-size: 30px;
+            margin: 20px 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .stat {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .connected-wallet {
+            background: #e7f3ff;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #0066cc;
+            margin-bottom: 15px;
+            word-break: break-all;
+        }
+
+        .fee-info {
+            font-size: 12px;
+            color: #666;
+            background: #fff3cd;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🔄 EVVM Cross-Chain Balancer</h1>
+            <p class="subtitle">Transfer MATE tokens between EVVM-A and EVVM-B on the same host chain</p>
+            <div id="walletStatus" class="connected-wallet" style="display:none;">
+                Connected: <span id="walletAddress"></span>
+            </div>
+            <button onclick="connectWallet()" id="connectBtn" style="max-width: 300px; margin-top: 15px;">
+                🔗 Connect Wallet
+            </button>
+        </div>
+
+        <!-- Main Cards -->
+        <div class="cards">
+            <!-- EVVM-A Balance -->
+            <div class="card">
+                <h2>📍 EVVM-A</h2>
+                <div class="balance-box">
+                    <div class="balance-label">Your Balance</div>
+                    <div class="balance-amount" id="balanceA">0.00</div>
+                    <div class="balance-token">MATE</div>
+                </div>
+                <button onclick="refreshBalances()">🔄 Refresh</button>
+            </div>
+
+            <!-- Transfer Section -->
+            <div class="card">
+                <h2>💸 Transfer</h2>
+
+                <select id="direction">
+                    <option value="A→B">Transfer A → B</option>
+                    <option value="B→A">Transfer B → A</option>
+                </select>
+
+                <input
+                    type="number"
+                    id="amount"
+                    placeholder="Amount to transfer"
+                    step="0.01"
+                >
+
+                <input
+                    type="number"
+                    id="priorityFee"
+                    placeholder="Priority Fee (min 0.001 ETH)"
+                    value="0.001"
+                    step="0.001"
+                >
+
+                <button onclick="initiateTransfer()" id="transferBtn">
+                    🚀 Initiate Transfer
+                </button>
+
+                <div class="fee-info">
+                    Fisher Fee: 0.1% • Priority Fee: Customizable
+                </div>
+
+                <div id="transferStatus" class="status"></div>
+            </div>
+
+            <!-- EVVM-B Balance -->
+            <div class="card">
+                <h2>📍 EVVM-B</h2>
+                <div class="balance-box">
+                    <div class="balance-label">Your Balance</div>
+                    <div class="balance-amount" id="balanceB">0.00</div>
+                    <div class="balance-token">MATE</div>
+                </div>
+                <button onclick="refreshBalances()">🔄 Refresh</button>
+            </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="card">
+            <h2>📊 Balancer Stats</h2>
+            <div class="stats-grid">
+                <div class="stat">
+                    <div class="stat-label">Total Liquidity A</div>
+                    <div class="stat-value" id="liquidityA">0</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Total Liquidity B</div>
+                    <div class="stat-value" id="liquidityB">0</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Your Nonce A</div>
+                    <div class="stat-value" id="nonceA">0</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Your Nonce B</div>
+                    <div class="stat-value" id="nonceB">0</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending Transfers -->
+        <div class="card">
+            <h2>⏳ Your Pending Transfers</h2>
+            <div id="pendingTransfers">
+                <p style="color: #666; text-align: center; padding: 20px;">
+                    No pending transfers
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ethers.js -->
+    <script src="https://cdn.ethers.io/lib/ethers-5.7.umd.min.js"></script>
+
+    <!-- Reown AppKit -->
+    <script src="https://unpkg.com/@reown/appkit@1.1.2/dist/appkit.umd.js"></script>
+    <script src="https://unpkg.com/@reown/appkit-adapter-ethers@1.1.2/dist/appkit-adapter-ethers.umd.js"></script>
+
+    <!-- App Config & Logic -->
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

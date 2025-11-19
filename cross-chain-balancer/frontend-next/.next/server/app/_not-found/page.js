@@ -1,0 +1,13 @@
+var R=require("../../chunks/ssr/[turbopack]_runtime.js")("server/app/_not-found/page.js")
+R.c("server/chunks/ssr/frutero_evvm_cross-chain-balancer_frontend-next_60baf119._.js")
+R.c("server/chunks/ssr/[root-of-the-server]__2256b897._.js")
+R.c("server/chunks/ssr/b572f_next_dist_esm_build_templates_app-page_0291a880.js")
+R.c("server/chunks/ssr/[root-of-the-server]__a1c876b9._.js")
+R.c("server/chunks/ssr/b572f_next_dist_bb02e688._.js")
+R.c("server/chunks/ssr/[root-of-the-server]__2708ddf2._.js")
+R.c("server/chunks/ssr/[root-of-the-server]__a323cfb5._.js")
+R.c("server/chunks/ssr/b572f_next_dist_client_components_eb1051a0._.js")
+R.c("server/chunks/ssr/b572f_next_dist_client_components_builtin_forbidden_5e960ca3.js")
+R.c("server/chunks/ssr/8a7a5_frontend-next__next-internal_server_app__not-found_page_actions_709b4742.js")
+R.m(571182)
+module.exports=R.m(571182).exports
